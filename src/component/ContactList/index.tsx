@@ -14,13 +14,11 @@ export const Contact: React.FC<{ contact: IContact }> = ({ contact }) => {
 }
 
 export const ContactList: React.FC = () => {
-  const res = useQuery<GetContactList>(GET_CONTACT_LIST)
-  const { loading, data } = res
+  const { loading, data } = useQuery<GetContactList>(GET_CONTACT_LIST)
 
   if (loading) return <>Loading...</>
   return (
     <>
-      <pre>{JSON.stringify(res.client.link, null, 2)}</pre>
       {data?.contact?.map((contact) => {
         return <Contact key={contact.id} contact={contact} />
       })}
