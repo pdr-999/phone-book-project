@@ -1,10 +1,6 @@
-import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
-
-const link = new HttpLink({
-  uri: process.env.REACT_APP_GQL_URL,
-})
+import { ApolloClient, InMemoryCache } from '@apollo/client'
 
 export const client = new ApolloClient({
+  uri: process.env.REACT_APP_GQL_URL,
   cache: new InMemoryCache(),
-  link,
 })
