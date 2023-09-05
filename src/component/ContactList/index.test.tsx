@@ -8,15 +8,15 @@ const goodData: IContact = {
 }
 
 // TODO: add missing + bad data test
-// const missingData: IContact = {
-//   first_name: 'John',
-//   last_name: 'Doe',
-// }
+const missingData: IContact = {
+  first_name: 'John',
+  last_name: 'Doe',
+}
 
-// const badData: IContact = {
-//   first_name: 'John',
-//   last_name: 'Doe',
-// }
+const badData: IContact = {
+  first_name: 'John',
+  last_name: 'Doe',
+}
 
 test('renders contact with good data', () => {
   render(<Contact contact={goodData} />)
