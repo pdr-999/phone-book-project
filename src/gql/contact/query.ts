@@ -22,6 +22,7 @@ export const GET_CONTACT_LIST = gql`
       phones {
         number
       }
+      updated_at
     }
   }
 `
