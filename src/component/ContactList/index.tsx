@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client'
+import { useEffect, useState } from 'react'
 import { GET_CONTACT_LIST } from '../../gql/contact/query'
 import {
   GetContactList,
@@ -29,17 +30,23 @@ export const ContactList: React.FC = () => {
     },
   })
 
+  const [offset, setOffset] = useState(0)
+
+  useEffect(() => {
+    fetchMore({
+      variables: {
+        offset: offset,
+      },
+    })
+  }, [fetchMore, offset])
+
   if (loading) return <>Loading...</>
   return (
     <>
       <button
         onClick={() => {
           if (typeof variables?.offset === 'undefined') return
-          fetchMore({
-            variables: {
-              offset: variables.offset + 10,
-            },
-          })
+          setOffset((prev) => prev + 10)
         }}
       >
         Refetch
