@@ -1,4 +1,4 @@
-export interface GetContactList {
+interface Contact {
   created_at: string
   first_name: string
   id: number
@@ -7,3 +7,5 @@ export interface GetContactList {
     number: string
   }
 }
+
+export type GetContactList = { contact: Contact[] }
