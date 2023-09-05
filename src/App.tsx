@@ -1,7 +1,11 @@
-import logo from './logo.svg'
+import { useQuery } from '@apollo/client'
 import './App.css'
+import { GET_CONTACT_LIST } from './gql/contact/query'
+import { GetContactList } from './gql/contact/type'
+import logo from './logo.svg'
 
-function App() {
+const App: React.FC = () => {
+  const { loading, data } = useQuery<GetContactList>(GET_CONTACT_LIST)
   return (
     <div className="App">
       <header className="App-header">
