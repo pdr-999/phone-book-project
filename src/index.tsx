@@ -1,17 +1,30 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import App from './App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 import { ApolloProvider } from '@apollo/client'
 import { client } from './gql/client'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Index from './pages'
+import { CreateContact } from './pages/contact/create'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Index />,
+  },
+  {
+    path: '/contact/create',
+    element: <CreateContact />,
+  },
+])
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <RouterProvider router={router} />
     </ApolloProvider>
   </React.StrictMode>
 )

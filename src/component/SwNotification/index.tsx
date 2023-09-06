@@ -4,11 +4,12 @@ export const SwNotification: React.FC = () => {
   const [waitingSw, setWaitingSw] = useState<ServiceWorker | null>(null)
 
   useEffect(() => {
-    navigator.serviceWorker.getRegistration().then((registration) => {
-      if (!registration) return
+    if ('serviceWorker' in navigator)
+      navigator.serviceWorker.getRegistration().then((registration) => {
+        if (!registration) return
 
-      setWaitingSw(registration.waiting)
-    })
+        setWaitingSw(registration.waiting)
+      })
   }, [])
 
   if (waitingSw === null) return <>Up to date!</>
