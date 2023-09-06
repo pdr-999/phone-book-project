@@ -4,6 +4,10 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.8.2",
+    "@emotion/react": "^11.11.1",
+    "@mantine/core": "^6.0.20",
+    "@mantine/form": "^6.0.20",
+    "@mantine/hooks": "^6.0.20",
     "apollo3-cache-persist": "^0.14.1",
     "graphql": "^16.8.0",
     "react": "^18.2.0",

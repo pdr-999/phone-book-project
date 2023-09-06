@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 import { ApolloProvider } from '@apollo/client'
@@ -8,6 +7,7 @@ import { client } from './gql/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Index from './pages'
 import { CreateContact } from './pages/contact/create'
+import { createEmotionCache, MantineProvider } from '@mantine/core'
 
 const router = createBrowserRouter([
   {
@@ -20,11 +20,16 @@ const router = createBrowserRouter([
   },
 ])
 
+const myCache = createEmotionCache({ key: 'mantine', prepend: true })
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <RouterProvider router={router} />
+      <MantineProvider emotionCache={myCache} withGlobalStyles withNormalizeCSS>
+        <RouterProvider router={router} />
+      </MantineProvider>
     </ApolloProvider>
   </React.StrictMode>
 )

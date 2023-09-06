@@ -1,4 +1,3 @@
-import './index.css'
 import { ContactList } from '../component/ContactList'
 import { SwNotification } from '../component/SwNotification'
 import { Link } from 'react-router-dom'
