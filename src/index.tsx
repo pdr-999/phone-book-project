@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Index from './pages'
 import { CreateContact } from './pages/contact/create'
 import { createEmotionCache, MantineProvider } from '@mantine/core'
+import { mantineTheme } from './mantine.config'
 
 const router = createBrowserRouter([
   {
@@ -31,38 +32,7 @@ root.render(
         emotionCache={myCache}
         withGlobalStyles
         withNormalizeCSS
-        theme={{
-          colorScheme: 'dark',
-          // https://omatsuri.app/color-shades-generator
-          colors: {
-            // Darken 18% Saturation -10%, base: #00aa5b
-            green: [
-              '#FFF',
-              '#FFF',
-              '#D8F3E6',
-              '#9FE6C5',
-              '#6AE0A9',
-              '#38E092',
-              '#16D67D',
-              '#0ABF6B',
-              '#00AA5B',
-              '#07844A',
-            ],
-            // Darken 10% Saturation -10%, base: #1b2632
-            dark: [
-              '#AFB9C5',
-              '#7B8EA3',
-              '#586D84',
-              '#425467',
-              '#314051',
-              '#253140',
-              '#1B2632',
-              '#141B22',
-              '#0E1317',
-              '#0A0D10',
-            ],
-          },
-        }}
+        theme={mantineTheme}
       >
         <RouterProvider router={router} />
       </MantineProvider>
