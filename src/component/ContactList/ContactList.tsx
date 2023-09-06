@@ -1,4 +1,8 @@
-export const ContactList: React.FC = () => {
+import { Contact, ContactProps } from '../Contact/Contact'
+
+export const ContactList: React.FC<{ contacts?: ContactProps[] }> = ({
+  contacts = [],
+}) => {
   // const { loading, data, variables, refetch, networkStatus } = useQuery<
   //   GetContactList,
   //   GetContactListVariables
@@ -30,7 +34,14 @@ export const ContactList: React.FC = () => {
 
   return (
     <>
-      <ContactList />
+      {contacts.map(({ firstName, lastName, phoneNumbers }, index) => (
+        <Contact
+          key={`${firstName}${lastName}`}
+          firstName={firstName}
+          lastName={lastName}
+          phoneNumbers={phoneNumbers}
+        />
+      ))}
     </>
   )
 }

@@ -23,6 +23,7 @@ export interface ContactProps {
   isFirstItem?: boolean
   isLastItem?: boolean
   phoneNumbers?: PhoneNumber[]
+  isActive?: boolean
 }
 
 const TRANSITION_PROPERTY: CSSObject = {
@@ -38,12 +39,18 @@ export const Contact: React.FC<ContactProps> = (props) => {
     isFirstItem: first = false,
     isLastItem: last = false,
     phoneNumbers = [],
+    isActive: isControlledActive = undefined,
   } = props
   const firstPhoneNumber = phoneNumbers[0]?.phoneNumber ?? null
 
-  const [isActive, setIsActive] = useState(false)
+  const [isActiveLocal, setIsActiveLocal] = useState(false)
 
-  const PHONE_NUMBER_ITEM_HEIGHT = rem(64 * phoneNumbers.length)
+  const isActive =
+    typeof isControlledActive === 'undefined'
+      ? isActiveLocal
+      : isControlledActive
+
+  const PHONE_NUMBER_ITEM_HEIGHT = rem(80 * phoneNumbers.length)
 
   const useStyles = createStyles(() => ({
     phoneNumbersInitial: {
@@ -81,7 +88,7 @@ export const Contact: React.FC<ContactProps> = (props) => {
     <>
       <Box
         pos={'relative'}
-        onClick={() => setIsActive((prev) => !prev)}
+        onClick={() => setIsActiveLocal((prev) => !prev)}
         sx={(theme) => ({
           backgroundColor: theme.colors.dark[6],
           // TODO: refactor?
