@@ -12,8 +12,8 @@ import { IconEdit, IconStar, IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
 
 interface PhoneNumber {
-  id: number
-  phoneNumber: string
+  id?: number
+  phoneNumber?: string
 }
 
 export interface ContactProps {
@@ -31,9 +31,12 @@ const TRANSITION_PROPERTY: CSSObject = {
   transitionTimingFunction: 'cubic-bezier(0.1, 0.85, 0.15, 1)',
 }
 
+const ACTIONS_HEIGHT = 64
+const PHONE_SINGLE_ROW_HEIGHT = 44
+const PHONE_NUMBER_ITEM_HEIGHT = rem(PHONE_SINGLE_ROW_HEIGHT)
+
 export const Contact: React.FC<ContactProps> = (props) => {
   const {
-    avatarUrl = 'https://ui-avatars.com/api/?name=+62',
     firstName = '',
     lastName = '',
     isFirstItem: first = false,
@@ -42,7 +45,7 @@ export const Contact: React.FC<ContactProps> = (props) => {
     isActive: isControlledActive = undefined,
   } = props
   const firstPhoneNumber = phoneNumbers[0]?.phoneNumber ?? null
-
+  const avatarUrl = `https://ui-avatars.com/api/?name=${firstName}+${lastName}`
   const [isActiveLocal, setIsActiveLocal] = useState(false)
 
   const isActive =
@@ -50,14 +53,12 @@ export const Contact: React.FC<ContactProps> = (props) => {
       ? isActiveLocal
       : isControlledActive
 
-  const PHONE_NUMBER_ITEM_HEIGHT = rem(80 * phoneNumbers.length)
-
   const useStyles = createStyles(() => ({
     phoneNumbersInitial: {
       height: 0,
     },
     phoneNumbersActive: {
-      height: PHONE_NUMBER_ITEM_HEIGHT,
+      height: PHONE_SINGLE_ROW_HEIGHT * phoneNumbers.length + ACTIONS_HEIGHT,
     },
     translateDown: {
       transform: 'translateY(.75rem)',
@@ -169,7 +170,7 @@ export const Contact: React.FC<ContactProps> = (props) => {
         ))}
 
         <Flex
-          h={PHONE_NUMBER_ITEM_HEIGHT}
+          h={ACTIONS_HEIGHT}
           sx={{
             overflow: 'hidden',
             alignItems: 'center',
@@ -182,14 +183,14 @@ export const Contact: React.FC<ContactProps> = (props) => {
             }
             gap={'md'}
           >
-            <ActionIcon color="yellow">
-              <IconStar size="1.125rem" />
+            <ActionIcon color="yellow" size={'lg'}>
+              <IconStar size="1.6rem" />
             </ActionIcon>
-            <ActionIcon color="blue">
-              <IconEdit size="1.125rem" />
+            <ActionIcon color="blue" size={'lg'}>
+              <IconEdit size="1.6rem" />
             </ActionIcon>
-            <ActionIcon color="red">
-              <IconTrash size="1.125rem" />
+            <ActionIcon color="red" size={'lg'}>
+              <IconTrash size="1.6rem" />
             </ActionIcon>
           </Flex>
         </Flex>
