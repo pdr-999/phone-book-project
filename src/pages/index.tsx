@@ -1,4 +1,4 @@
-import { ContactList } from '../component/ContactList'
+import { ContactList } from '../component/Contact'
 import { SwNotification } from '../component/SwNotification'
 import { Link } from 'react-router-dom'
 
