@@ -24,6 +24,7 @@ export const GET_CONTACT_LIST = gql`
         number
       }
       updated_at
+      is_favourite @client
     }
   }
 `

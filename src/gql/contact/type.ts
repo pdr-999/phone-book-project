@@ -18,6 +18,7 @@ export interface Contact {
   id?: number
   last_name?: string
   phones?: Phone[]
+  is_favourite?: boolean
 }
 
 export type GetContactList = { contact: Contact[] }
@@ -25,4 +26,5 @@ export type GetContactList = { contact: Contact[] }
 export type GetContactListVariables = {
   offset?: number
   order_by?: ContactOrderBy
+  is_favourite?: boolean
 }

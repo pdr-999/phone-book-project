@@ -1,25 +1,26 @@
 import { useQuery } from '@apollo/client'
+import { Box, Divider } from '@mantine/core'
 import { useState } from 'react'
 import { GET_CONTACT_LIST } from '../../gql/contact/query'
 import { GetContactList, GetContactListVariables } from '../../gql/contact/type'
+import { addContactToFavourites } from '../../gql/favouriteContacts/data'
 import { Contact, ContactProps } from '../Contact/Contact'
-import { Box, Divider } from '@mantine/core'
 
-export const ContactList: React.FC<{ contacts?: ContactProps[] }> = ({
-  contacts: propsContacts = [],
-}) => {
-  const [contacts, setContacts] = useState(propsContacts)
-  const { loading, data, variables, refetch, networkStatus } = useQuery<
-    GetContactList,
-    GetContactListVariables
-  >(GET_CONTACT_LIST, {
-    variables: {
-      order_by: {
-        first_name: 'asc',
+export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
+  const { data } = useQuery<GetContactList, GetContactListVariables>(
+    GET_CONTACT_LIST,
+    {
+      variables: {
+        order_by: {
+          first_name: 'asc',
+        },
       },
-    },
-    notifyOnNetworkStatusChange: true,
-  })
+      context: {
+        is_favourite: true,
+      },
+      notifyOnNetworkStatusChange: true,
+    }
+  )
 
   // TODO: offsetMore with cache, it's currently not fetching from cache
   // const [offsetMore, setOffsetMore] = useState(0)
@@ -40,11 +41,12 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = ({
   const [expandedContactId, setExpandedContactId] = useState<number | null>(
     null
   )
-
   return (
     <>
       {/* TODO: isolate rerender to */}
-      {data?.contact.map(({ first_name, last_name, id, phones }, index) => {
+      {data?.contact.map((contact, index) => {
+        const { first_name, last_name, id, phones } = contact
+
         return (
           <Box key={id}>
             {(first_name?.startsWith(
@@ -67,6 +69,17 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = ({
                 const newId = id === expandedContactId ? null : id
 
                 setExpandedContactId(newId)
+              }}
+              onFavouriteClick={() => {
+                if (!id) return
+                /**
+                  There is currently no built-in API for persisting reactive variables, 
+                  but you can write variable values to localStorage (or another store) 
+                  whenever they're modified, and initialize those variables with their 
+                  stored value (if any) on app load.
+                 */
+
+                addContactToFavourites(id)
               }}
               isActive={expandedContactId === id}
               phoneNumbers={
