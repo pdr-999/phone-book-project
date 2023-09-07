@@ -25,6 +25,7 @@ export interface ContactProps {
   phoneNumbers?: PhoneNumber[]
   isActive?: boolean
   onClick?: () => unknown
+  onFavouriteClick?: () => unknown
 }
 
 const TRANSITION_PROPERTY: CSSObject = {
@@ -184,7 +185,11 @@ export const Contact: React.FC<ContactProps> = (props) => {
             }
             gap={'md'}
           >
-            <ActionIcon color="yellow" size={'lg'}>
+            <ActionIcon
+              color="yellow"
+              size={'lg'}
+              onClick={props.onFavouriteClick}
+            >
               <IconStar size="1.6rem" />
             </ActionIcon>
             <ActionIcon color="blue" size={'lg'}>
