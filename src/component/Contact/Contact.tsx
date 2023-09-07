@@ -108,13 +108,7 @@ export const Contact: React.FC<ContactProps> = (props) => {
         p={'xs'}
       >
         <Flex justify={'start'} align={'center'} gap={'sm'} h={'2.8rem'}>
-          <Avatar
-            src={avatarUrl}
-            alt="it's me"
-            radius={'xl'}
-            h={'2.8rem'}
-            w={'2.8rem'}
-          />
+          <Avatar src={avatarUrl} alt="it's me" radius={'xl'} />
           <Box>
             <Flex justify={'start'} direction={'column'}>
               <Text
