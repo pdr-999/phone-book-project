@@ -70,7 +70,10 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = ({
               }}
               isActive={expandedContactId === id}
               phoneNumbers={
-                phones?.map((phone) => ({ phoneNumber: phone.number })) ?? []
+                phones?.map((phone) => ({
+                  phoneNumber: phone.number,
+                  id: phone.id,
+                })) ?? []
               }
             />
           </Box>

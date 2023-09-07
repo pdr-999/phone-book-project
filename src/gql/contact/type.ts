@@ -9,6 +9,7 @@ interface ContactOrderBy {
 }
 
 interface Phone {
+  id?: number
   number?: string
 }
 export interface Contact {
