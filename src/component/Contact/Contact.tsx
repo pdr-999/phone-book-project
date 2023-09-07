@@ -121,17 +121,16 @@ export const Contact: React.FC<ContactProps> = (props) => {
               >
                 {firstName} {lastName}
               </Text>
-              {firstPhoneNumber ? (
-                <Text
-                  sx={{
-                    ...TRANSITION_PROPERTY,
-                  }}
-                  className={isActive ? classes.opacity0 : undefined}
-                  size={'sm'}
-                >
-                  {firstPhoneNumber}
-                </Text>
-              ) : null}
+
+              <Text
+                sx={{
+                  ...TRANSITION_PROPERTY,
+                }}
+                className={isActive ? classes.opacity0 : undefined}
+                size={'sm'}
+              >
+                {firstPhoneNumber ?? 'No phone number'}
+              </Text>
             </Flex>
           </Box>
         </Flex>
