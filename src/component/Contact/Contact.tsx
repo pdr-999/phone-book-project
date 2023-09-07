@@ -24,6 +24,7 @@ export interface ContactProps {
   isLastItem?: boolean
   phoneNumbers?: PhoneNumber[]
   isActive?: boolean
+  onClick?: () => unknown
 }
 
 const TRANSITION_PROPERTY: CSSObject = {
@@ -89,7 +90,13 @@ export const Contact: React.FC<ContactProps> = (props) => {
     <>
       <Box
         pos={'relative'}
-        onClick={() => setIsActiveLocal((prev) => !prev)}
+        onClick={() => {
+          if (props.onClick) {
+            props.onClick()
+          } else {
+            setIsActiveLocal((prev) => !prev)
+          }
+        }}
         sx={(theme) => ({
           backgroundColor: theme.colors.dark[6],
           // TODO: refactor?

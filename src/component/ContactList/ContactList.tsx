@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import { Contact, ContactProps } from '../Contact/Contact'
-import { GetContactList, GetContactListVariables } from '../../gql/contact/type'
 import { useQuery } from '@apollo/client'
+import { useState } from 'react'
 import { GET_CONTACT_LIST } from '../../gql/contact/query'
+import { GetContactList, GetContactListVariables } from '../../gql/contact/type'
+import { Contact, ContactProps } from '../Contact/Contact'
+import { Box, Divider } from '@mantine/core'
 
 export const ContactList: React.FC<{ contacts?: ContactProps[] }> = ({
   contacts: propsContacts = [],
@@ -36,18 +37,45 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = ({
   //   })
   // }, [offset, refetch])
 
+  const [expandedContactId, setExpandedContactId] = useState<number | null>(
+    null
+  )
+
   return (
     <>
-      {data?.contact.map(({ first_name, last_name, id, phones }, index) => (
-        <Contact
-          key={id}
-          firstName={first_name}
-          lastName={last_name}
-          phoneNumbers={
-            phones?.map((phone) => ({ phoneNumber: phone.number })) ?? []
-          }
-        />
-      ))}
+      {/* TODO: isolate rerender to */}
+      {data?.contact.map(({ first_name, last_name, id, phones }, index) => {
+        return (
+          <Box key={id}>
+            {(first_name?.startsWith(
+              data.contact[index - 1]?.first_name?.[0]?.toLocaleUpperCase() ??
+                ''
+            ) === false ||
+              index === 0) && (
+              <Divider
+                labelPosition="center"
+                label={first_name?.charAt(0).toUpperCase()}
+                my={'md'}
+              />
+            )}
+
+            <Contact
+              firstName={first_name}
+              lastName={last_name}
+              onClick={() => {
+                if (!id) return
+                const newId = id === expandedContactId ? null : id
+
+                setExpandedContactId(newId)
+              }}
+              isActive={expandedContactId === id}
+              phoneNumbers={
+                phones?.map((phone) => ({ phoneNumber: phone.number })) ?? []
+              }
+            />
+          </Box>
+        )
+      })}
     </>
   )
 }
