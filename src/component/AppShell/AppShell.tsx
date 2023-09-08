@@ -2,6 +2,7 @@ import {
   ActionIcon,
   AppShell,
   Box,
+  Container,
   Flex,
   Grid,
   Header,
@@ -17,40 +18,48 @@ export const MyAppShell: React.FC<{ children: ReactNode }> = (props) => {
 
   return (
     <AppShell
+      styles={{
+        main: {
+          paddingLeft: '0',
+          paddingRight: '0',
+        },
+      }}
       header={
         <Header height={48} p="xs">
-          <Grid>
-            <Grid.Col span={3}>
-              {location.pathname !== '/' && (
-                <ActionIcon
-                  onClick={() => {
-                    navigate(-1)
-                  }}
-                >
-                  <IconChevronLeft />
-                </ActionIcon>
-              )}
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text align="center" lh={'1.7rem'} fw={'bold'}>
-                My Phone Book
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={3}>
-              <Flex gap={'1rem'} justify={'flex-end'}>
-                {location.pathname !== '/contact/create' && (
+          <Container size="sm">
+            <Grid>
+              <Grid.Col span={3}>
+                {location.pathname !== '/' && (
                   <ActionIcon
                     onClick={() => {
-                      navigate('/contact/create')
+                      navigate(-1)
                     }}
                   >
-                    <IconPlus />
+                    <IconChevronLeft />
                   </ActionIcon>
                 )}
-              </Flex>
-            </Grid.Col>
-          </Grid>
-          <Box></Box>
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <Text align="center" lh={'1.7rem'} fw={'bold'}>
+                  My Phone Book
+                </Text>
+              </Grid.Col>
+              <Grid.Col span={3}>
+                <Flex gap={'1rem'} justify={'flex-end'}>
+                  {location.pathname !== '/contact/create' && (
+                    <ActionIcon
+                      onClick={() => {
+                        navigate('/contact/create')
+                      }}
+                    >
+                      <IconPlus />
+                    </ActionIcon>
+                  )}
+                </Flex>
+              </Grid.Col>
+            </Grid>
+            <Box></Box>
+          </Container>
         </Header>
       }
     >

@@ -3,6 +3,7 @@ import { ContactList } from '../component/ContactList/ContactList'
 import { client } from '../gql/client'
 import { EDIT_PHONE_BY_PK } from '../gql/phone/mutation'
 import { EditPhoneByPkVariables } from '../gql/phone/type'
+import { Container } from '@mantine/core'
 
 const Index: React.FC = () => {
   useEffect(() => {
@@ -34,7 +35,9 @@ const Index: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <ContactList />
+        <Container size="sm">
+          <ContactList />
+        </Container>
       </header>
     </div>
   )

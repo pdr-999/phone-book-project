@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Box, Loader } from '@mantine/core'
+import { Box, Container, Loader } from '@mantine/core'
 import { useParams } from 'react-router-dom'
 import { ContactForm } from '../../component/ContactForm/ContactForm'
 import { GET_CONTACT_BY_PK } from '../../gql/contact/query'
@@ -21,26 +21,28 @@ export const ContactId: React.FC = () => {
 
   return (
     <>
-      <Box>
-        {loading && <Loader />}
-        {data?.contact_by_pk?.id ? (
-          <ContactForm
-            initialValues={{
-              id: data.contact_by_pk.id,
-              firstName: data.contact_by_pk.first_name ?? '',
-              lastName: data.contact_by_pk.last_name ?? '',
-              phones:
-                data.contact_by_pk.phones?.map((phone) => ({
-                  id: phone?.id,
-                  phoneNumber: phone?.number,
-                })) ?? [],
-            }}
-          />
-        ) : (
-          // TODO: better error message
-          'No contact found'
-        )}
-      </Box>
+      <Container size="sm">
+        <Box>
+          {loading && <Loader />}
+          {data?.contact_by_pk?.id ? (
+            <ContactForm
+              initialValues={{
+                id: data.contact_by_pk.id,
+                firstName: data.contact_by_pk.first_name ?? '',
+                lastName: data.contact_by_pk.last_name ?? '',
+                phones:
+                  data.contact_by_pk.phones?.map((phone) => ({
+                    id: phone?.id,
+                    phoneNumber: phone?.number,
+                  })) ?? [],
+              }}
+            />
+          ) : (
+            // TODO: better error message
+            'No contact found'
+          )}
+        </Box>
+      </Container>
     </>
   )
 }
