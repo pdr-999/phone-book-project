@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist'
-import { favouriteContactsVar } from './favouriteContacts/query'
+import { favouriteContactsVar } from './favouriteContacts/data'
 
 const cache = new InMemoryCache({
   typePolicies: {
