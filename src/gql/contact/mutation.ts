@@ -9,3 +9,11 @@ export const EDIT_CONTACT_BY_ID = gql`
     }
   }
 `
+
+export const DELETE_CONTACT_BY_ID = gql`
+  mutation Mutation_root($deleteContactByPkId: Int!) {
+    delete_contact_by_pk(id: $deleteContactByPkId) {
+      id
+    }
+  }
+`

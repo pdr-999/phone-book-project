@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { Box, Divider } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { IconStar, IconStarFilled } from '@tabler/icons-react'
@@ -15,6 +15,7 @@ import { GET_FAVOURITE_CONTACTS } from '../../gql/favouriteContacts/query'
 import { GetFavouriteContactList } from '../../gql/favouriteContacts/type'
 import { Contact, ContactProps } from '../Contact/Contact'
 import { useWindowScroll } from '@mantine/hooks'
+import { DELETE_CONTACT_BY_ID } from '../../gql/contact/mutation'
 const scrollMaxValue = () => {
   const body = document.body
   const html = document.documentElement
@@ -100,6 +101,13 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
       })
     }
   }, [scroll.y, maxScrollH, fetchMore, isEndOfData])
+
+  const [mutateDeleteContact] = useMutation<
+    unknown,
+    {
+      deleteContactByPkId: number
+    }
+  >(DELETE_CONTACT_BY_ID)
 
   return (
     <>
@@ -189,6 +197,30 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
             )}
 
             <Contact
+              onConfirmDelete={() => {
+                console.log('go')
+                if (!id) return
+                mutateDeleteContact({
+                  variables: {
+                    deleteContactByPkId: id,
+                  },
+                  update(cache) {
+                    const normalizedId = cache.identify({
+                      id,
+                      __typename: 'contact',
+                    })
+                    cache.evict({ id: normalizedId })
+                    cache.gc()
+                  },
+                })
+                  .then(() => {
+                    notifications.show({
+                      message: 'Deleted contact',
+                    })
+                    // TODO: Handle error
+                  })
+                  .catch(() => {})
+              }}
               firstName={first_name}
               lastName={last_name}
               onClick={() => {

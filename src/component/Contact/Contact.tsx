@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Avatar,
   Box,
+  Button,
   CSSObject,
   Flex,
   Text,
@@ -15,6 +16,8 @@ import {
   IconTrash,
 } from '@tabler/icons-react'
 import { useState } from 'react'
+import { DELETE_CONTACT_BY_ID } from '../../gql/contact/mutation'
+import { useMutation } from '@apollo/client'
 
 interface PhoneNumber {
   id?: number
@@ -32,6 +35,7 @@ export interface ContactProps {
   onClick?: () => unknown
   onFavouriteClick?: () => unknown
   onEditClick?: () => unknown
+  onConfirmDelete?: () => unknown
   isFavourite?: boolean
 }
 
@@ -94,6 +98,8 @@ export const Contact: React.FC<ContactProps> = (props) => {
   }))
 
   const { classes } = useStyles()
+
+  const [isVerifyingDelete, setIsVerifyingDelete] = useState(false)
 
   return (
     <>
@@ -206,9 +212,40 @@ export const Contact: React.FC<ContactProps> = (props) => {
             <ActionIcon color="blue" size={'lg'} onClick={props.onEditClick}>
               <IconEdit size="1.6rem" />
             </ActionIcon>
-            <ActionIcon color="red" size={'lg'}>
-              <IconTrash size="1.6rem" />
-            </ActionIcon>
+            {isVerifyingDelete ? (
+              <>
+                <Button
+                  compact
+                  color="red"
+                  variant="subtle"
+                  mt={'0.3rem'}
+                  onClick={() => {
+                    if (props.onConfirmDelete) {
+                      props.onConfirmDelete()
+                    }
+                  }}
+                >
+                  Confirm Delete
+                </Button>
+
+                <Button
+                  compact
+                  variant="subtle"
+                  mt={'0.3rem'}
+                  onClick={() => setIsVerifyingDelete(false)}
+                >
+                  Cancel
+                </Button>
+              </>
+            ) : (
+              <ActionIcon
+                color="red"
+                size={'lg'}
+                onClick={() => setIsVerifyingDelete(true)}
+              >
+                <IconTrash size="1.6rem" />
+              </ActionIcon>
+            )}
           </Flex>
         </Flex>
       </Flex>
