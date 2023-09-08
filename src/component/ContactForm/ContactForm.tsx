@@ -57,6 +57,10 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
       phoneNumber: props.initialValues?.phoneNumber ?? '',
       id: props.initialValues.id,
     },
+    validate: {
+      phoneNumber: (values) =>
+        values.length === 0 ? 'Invalid Phone Number' : null,
+    },
   })
   const isNew = !form.values.id
 
