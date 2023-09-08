@@ -12,8 +12,7 @@ const cache = new InMemoryCache({
           },
         },
         contact: {
-          keyArgs: ['id'],
-          read(existing) {
+          read(existing, b) {
             return existing
           },
           merge(existing, incoming: { __ref: string }[], { args: _args }) {
@@ -26,9 +25,6 @@ const cache = new InMemoryCache({
 
             return [...ext.values()].map((e) => ({ __ref: e }))
           },
-          // merge(existing = [], incoming: any[]) {
-          //   return [...existing, ...incoming]
-          // },
         },
       },
     },
@@ -43,28 +39,4 @@ await persistCache({
 export const client = new ApolloClient({
   uri: process.env.REACT_APP_GQL_URL,
   cache,
-  // cache: new InMemoryCache({
-  // typePolicies: {
-  //   Query: {
-  //     fields: {
-  //       contact: {
-  //         keyArgs: [],
-  //         // merge(existing = [], incoming = []) {
-  //         //   return [...existing, ...incoming]
-  //         // },
-  //         merge(
-  //           existing?: { __ref: string }[],
-  //           incoming?: { __ref: string }[]
-  //         ) {
-  //           const idSet = new Set(existing?.map((ext) => ext.__ref) ?? [])
-  //           incoming?.forEach((inc) => {
-  //             idSet.add(inc.__ref)
-  //           })
-  //           return Array.from(idSet.values()).map((uniq) => ({ __ref: uniq }))
-  //         },
-  //       },
-  //     },
-  //   },
-  // },
-  // }),
 })

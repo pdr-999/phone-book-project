@@ -28,6 +28,27 @@ export type GetContactListVariables = {
   limit?: number
   order_by?: ContactOrderBy
   is_favourite?: boolean
+  where?: {
+    _or: [
+      {
+        first_name: {
+          _ilike: string
+        }
+      },
+      {
+        last_name: {
+          _ilike: string
+        }
+      },
+      {
+        phones: {
+          number: {
+            _ilike: string
+          }
+        }
+      }
+    ]
+  }
 }
 
 export type GetContactByPk = { contact_by_pk: Contact }

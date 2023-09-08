@@ -1,11 +1,17 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { Box, Divider } from '@mantine/core'
+import { Box, Divider, TextInput } from '@mantine/core'
+import { useDebouncedValue, useWindowScroll } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { IconStar, IconStarFilled } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { DELETE_CONTACT_BY_ID } from '../../gql/contact/mutation'
 import { GET_CONTACT_LIST } from '../../gql/contact/query'
-import { GetContactList, GetContactListVariables } from '../../gql/contact/type'
+import {
+  Contact as ContactType,
+  GetContactList,
+  GetContactListVariables,
+} from '../../gql/contact/type'
 import {
   addContactToFavourites,
   getFavouriteContactsFromLocalStorage,
@@ -14,8 +20,6 @@ import {
 import { GET_FAVOURITE_CONTACTS } from '../../gql/favouriteContacts/query'
 import { GetFavouriteContactList } from '../../gql/favouriteContacts/type'
 import { Contact, ContactProps } from '../Contact/Contact'
-import { useWindowScroll } from '@mantine/hooks'
-import { DELETE_CONTACT_BY_ID } from '../../gql/contact/mutation'
 const scrollMaxValue = () => {
   const body = document.body
   const html = document.documentElement
@@ -32,6 +36,41 @@ const scrollMaxValue = () => {
 
   return documentHeight - windowHeight
 }
+
+const DebouncedTextInput: React.FC<{ onChange: (value: string) => unknown }> = (
+  props
+) => {
+  const [search, setSearch] = useState('')
+  const [debouncedSearch] = useDebouncedValue(search, 200)
+
+  useEffect(() => {
+    props.onChange(debouncedSearch)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch])
+  return (
+    <>
+      <TextInput
+        placeholder="Search..."
+        onChange={(e) => {
+          const text = e.target.value
+          setSearch(text)
+        }}
+      />
+    </>
+  )
+}
+const searchFilter = (contact: ContactType, searchQuery: string) => {
+  const fullName = `${contact.first_name} ${contact.last_name}`
+
+  return (
+    fullName.toLocaleLowerCase()?.includes(searchQuery?.toLocaleLowerCase()) ||
+    !!contact.phones?.find((phone) =>
+      phone.number
+        ?.toLocaleLowerCase()
+        ?.includes(searchQuery?.toLocaleLowerCase())
+    )
+  )
+}
 const PER_PAGE = 10
 export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
   const [scroll] = useWindowScroll()
@@ -43,19 +82,19 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
   /**
    * FIXME: after creating Zone Doe, then changing it to Aone Done, user stays at bottom
    */
-  const { data, fetchMore } = useQuery<GetContactList, GetContactListVariables>(
-    GET_CONTACT_LIST,
-    {
-      fetchPolicy: 'cache-and-network',
-      variables: {
-        limit: PER_PAGE,
-        offset: 0,
-        order_by: {
-          first_name: 'asc',
-        },
+  const { data, fetchMore, refetch } = useQuery<
+    GetContactList,
+    GetContactListVariables
+  >(GET_CONTACT_LIST, {
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      limit: PER_PAGE,
+      offset: 0,
+      order_by: {
+        first_name: 'asc',
       },
-    }
-  )
+    },
+  })
 
   const { data: favouriteContactsData } = useQuery<GetFavouriteContactList>(
     GET_FAVOURITE_CONTACTS
@@ -67,11 +106,6 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
     null
   )
 
-  const contacts =
-    data?.contact?.filter(
-      (contact) => contact.id && !favouriteContacts.has(contact.id)
-    ) ?? []
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setOffset] = useState(0)
 
@@ -82,9 +116,8 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
   const [isEndOfData, setIsEndOfData] = useState(false)
 
   useEffect(() => {
-    if (isEndOfData) return
     // FIXME: if footer is really long then you gotta scroll till bottom
-    if (scroll.y === maxScrollH) {
+    if (!isEndOfData && scroll.y === maxScrollH && maxScrollH !== 0) {
       setOffset((prev) => {
         const newPrev = prev + PER_PAGE
 
@@ -103,7 +136,8 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
         return newPrev
       })
     }
-  }, [scroll.y, maxScrollH, fetchMore, isEndOfData])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scroll.y, maxScrollH, isEndOfData])
 
   const [mutateDeleteContact] = useMutation<
     unknown,
@@ -112,8 +146,57 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
     }
   >(DELETE_CONTACT_BY_ID)
 
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+
+  const contacts =
+    data?.contact?.filter(
+      (contact) =>
+        contact.id &&
+        !favouriteContacts.has(contact.id) &&
+        searchFilter(contact, debouncedSearch)
+    ) ?? []
+
+  useEffect(() => {
+    // if (debouncedSearch.length === 0) {
+    // setIsEndOfData(false)
+    // setOffset(0)
+    // refetch({
+    //   where: undefined,
+    // })
+    // } else {
+    //   refetch({
+    //     where: {
+    //       _or: [
+    //         {
+    //           first_name: {
+    //             _ilike: `%${debouncedSearch}%`,
+    //           },
+    //         },
+    //         {
+    //           last_name: {
+    //             _ilike: `%${debouncedSearch}%`,
+    //           },
+    //         },
+    //         {
+    //           phones: {
+    //             number: {
+    //               _ilike: `%${debouncedSearch}%`,
+    //             },
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   })
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch])
   return (
     <>
+      <DebouncedTextInput
+        onChange={(value) => {
+          setDebouncedSearch(value)
+        }}
+      />
       <Box>
         {favouriteContacts.size > 0 && (
           <Divider
@@ -201,7 +284,6 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
 
             <Contact
               onConfirmDelete={() => {
-                console.log('go')
                 if (!id) return
                 mutateDeleteContact({
                   variables: {

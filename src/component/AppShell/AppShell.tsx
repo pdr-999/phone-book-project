@@ -1,4 +1,12 @@
-import { ActionIcon, AppShell, Box, Grid, Header, Text } from '@mantine/core'
+import {
+  ActionIcon,
+  AppShell,
+  Box,
+  Flex,
+  Grid,
+  Header,
+  Text,
+} from '@mantine/core'
 import { IconChevronLeft, IconPlus } from '@tabler/icons-react'
 import { ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -12,7 +20,7 @@ export const MyAppShell: React.FC<{ children: ReactNode }> = (props) => {
       header={
         <Header height={48} p="xs">
           <Grid>
-            <Grid.Col span={2}>
+            <Grid.Col span={3}>
               {location.pathname !== '/' && (
                 <ActionIcon
                   onClick={() => {
@@ -23,24 +31,23 @@ export const MyAppShell: React.FC<{ children: ReactNode }> = (props) => {
                 </ActionIcon>
               )}
             </Grid.Col>
-            <Grid.Col span={8}>
+            <Grid.Col span={6}>
               <Text align="center" lh={'1.7rem'} fw={'bold'}>
                 My Phone Book
               </Text>
             </Grid.Col>
-            <Grid.Col span={2}>
-              {location.pathname !== '/contact/create' && (
-                <ActionIcon
-                  onClick={() => {
-                    navigate('/contact/create')
-                  }}
-                  sx={{
-                    float: 'right',
-                  }}
-                >
-                  <IconPlus />
-                </ActionIcon>
-              )}
+            <Grid.Col span={3}>
+              <Flex gap={'1rem'} justify={'flex-end'}>
+                {location.pathname !== '/contact/create' && (
+                  <ActionIcon
+                    onClick={() => {
+                      navigate('/contact/create')
+                    }}
+                  >
+                    <IconPlus />
+                  </ActionIcon>
+                )}
+              </Flex>
             </Grid.Col>
           </Grid>
           <Box></Box>
