@@ -11,25 +11,27 @@ const cache = new InMemoryCache({
             return favouriteContactsVar()
           },
         },
+        contact: {
+          keyArgs: ['id'],
+          read(existing) {
+            return existing
+          },
+          merge(existing, incoming: { __ref: string }[], { args: _args }) {
+            const ext = new Set<string>(
+              existing?.map((e: { __ref: string }) => e.__ref) ?? []
+            )
+            for (const inc of incoming) {
+              ext.add(inc.__ref)
+            }
+
+            return [...ext.values()].map((e) => ({ __ref: e }))
+          },
+          // merge(existing = [], incoming: any[]) {
+          //   return [...existing, ...incoming]
+          // },
+        },
       },
     },
-    // contact: {
-    //   fields: {
-    //     contact: {
-    //       keyArgs: ['id'],
-    //       merge(existing, incoming: { __ref: string }[], { args: _args }) {
-    //         const ext = new Set<string>(
-    //           existing?.map((e: { __ref: string }) => e.__ref) ?? []
-    //         )
-
-    //         for (const inc of incoming) {
-    //           ext.add(inc.__ref)
-    //         }
-    //         return [...ext.values()].map((e) => ({ __ref: e }))
-    //       },
-    //     },
-    //   },
-    // },
   },
 })
 // await before instantiating ApolloClient, else queries might run before the cache is persisted

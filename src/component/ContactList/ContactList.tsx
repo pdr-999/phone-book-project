@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Box, Divider } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { IconStar, IconStarFilled } from '@tabler/icons-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GET_CONTACT_LIST } from '../../gql/contact/query'
 import { GetContactList, GetContactListVariables } from '../../gql/contact/type'
@@ -14,26 +14,28 @@ import {
 import { GET_FAVOURITE_CONTACTS } from '../../gql/favouriteContacts/query'
 import { GetFavouriteContactList } from '../../gql/favouriteContacts/type'
 import { Contact, ContactProps } from '../Contact/Contact'
-// const scrollMaxValue = () => {
-//   const body = document.body
-//   const html = document.documentElement
+import { useWindowScroll } from '@mantine/hooks'
+const scrollMaxValue = () => {
+  const body = document.body
+  const html = document.documentElement
 
-//   const documentHeight = Math.max(
-//     body.scrollHeight,
-//     body.offsetHeight,
-//     html.clientHeight,
-//     html.scrollHeight,
-//     html.offsetHeight
-//   )
+  const documentHeight = Math.max(
+    body.scrollHeight,
+    body.offsetHeight,
+    html.clientHeight,
+    html.scrollHeight,
+    html.offsetHeight
+  )
 
-//   const windowHeight = window.innerHeight
+  const windowHeight = window.innerHeight
 
-//   return documentHeight - windowHeight
-// }
+  return documentHeight - windowHeight
+}
+const PER_PAGE = 5
 export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
-  // const [scroll, scrollTo] = useWindowScroll()
+  const [scroll] = useWindowScroll()
 
-  // const maxScrollH = scrollMaxValue()
+  const maxScrollH = scrollMaxValue()
 
   const navigate = useNavigate()
 
@@ -41,19 +43,15 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
     GetContactList,
     GetContactListVariables
   >(GET_CONTACT_LIST, {
-    // fetchPolicy: 'cache-and-network',
-    // nextFetchPolicy: 'cache-first',
     fetchPolicy: 'cache-and-network',
     variables: {
-      limit: 10,
+      limit: PER_PAGE,
       offset: 0,
       order_by: {
         first_name: 'asc',
       },
     },
   })
-
-  console.log(data)
 
   const { data: favouriteContactsData } = useQuery<GetFavouriteContactList>(
     GET_FAVOURITE_CONTACTS
@@ -70,29 +68,39 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
       (contact) => contact.id && !favouriteContacts.has(contact.id)
     ) ?? []
 
-  // useEffect(() => {
-  //   if (maxScrollH === 0) return
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setOffset] = useState(0)
 
-  //   // FIXME: if footer is really long then you gotta scroll till bottom
-  //   if (scroll.y === maxScrollH) {
+  /**
+   * FIXME:
+   * Backend doesn't have pagination
+   */
+  const [isEndOfData, setIsEndOfData] = useState(false)
 
-  //   }
-  // }, [scroll.y, maxScrollH])
+  useEffect(() => {
+    if (isEndOfData) return
+    // FIXME: if footer is really long then you gotta scroll till bottom
+    if (scroll.y === maxScrollH) {
+      setOffset((prev) => {
+        const newPrev = prev + PER_PAGE
+
+        fetchMore({
+          variables: {
+            offset: newPrev,
+          },
+        }).then((res) => {
+          if (res?.data.contact.length === 0) {
+            setIsEndOfData(true)
+          }
+        })
+
+        return newPrev
+      })
+    }
+  }, [scroll.y, maxScrollH, fetchMore, isEndOfData])
+
   return (
     <>
-      <button
-        onClick={() => {
-          if (data?.contact.length) {
-            fetchMore({
-              variables: {
-                offset: data?.contact.length,
-              },
-            })
-          }
-        }}
-      >
-        fetchMore
-      </button>
       <Box>
         {favouriteContacts.size > 0 && (
           <Divider
