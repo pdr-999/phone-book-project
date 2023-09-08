@@ -39,19 +39,19 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
 
   const navigate = useNavigate()
 
-  const { data, refetch, fetchMore } = useQuery<
-    GetContactList,
-    GetContactListVariables
-  >(GET_CONTACT_LIST, {
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      limit: PER_PAGE,
-      offset: 0,
-      order_by: {
-        first_name: 'asc',
+  const { data, fetchMore } = useQuery<GetContactList, GetContactListVariables>(
+    GET_CONTACT_LIST,
+    {
+      fetchPolicy: 'cache-and-network',
+      variables: {
+        limit: PER_PAGE,
+        offset: 0,
+        order_by: {
+          first_name: 'asc',
+        },
       },
-    },
-  })
+    }
+  )
 
   const { data: favouriteContactsData } = useQuery<GetFavouriteContactList>(
     GET_FAVOURITE_CONTACTS
