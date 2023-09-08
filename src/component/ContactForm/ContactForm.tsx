@@ -10,7 +10,7 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
-import { IconCheck, IconEdit, IconPlus } from '@tabler/icons-react'
+import { IconCheck, IconEdit, IconPlus, IconTrash } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { EDIT_CONTACT_BY_ID } from '../../gql/contact/mutation'
 import { EditContactByPkVariables } from '../../gql/contact/type'
@@ -151,6 +151,7 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
     }
   }
 
+  const [isVerifyingDelete, setIsVerifyingDelete] = useState(false)
   const variant = () => {
     let variant: Variants<'unstyled' | 'default' | 'filled'> = 'unstyled'
 
@@ -197,16 +198,49 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
     } else {
       return (
         <>
-          <ActionIcon
-            type="button"
-            mt={'0.2rem'}
-            onClick={(e) => {
-              e.preventDefault()
-              setIsEditing((prev) => !prev)
-            }}
-          >
-            <IconEdit />
-          </ActionIcon>
+          {!isVerifyingDelete && (
+            <ActionIcon
+              variant="subtle"
+              type="button"
+              mt={'0.2rem'}
+              onClick={(e) => {
+                e.preventDefault()
+                setIsEditing((prev) => !prev)
+              }}
+            >
+              <IconEdit />
+            </ActionIcon>
+          )}
+
+          {isVerifyingDelete ? (
+            <>
+              <Button variant="subtle" color="red" mt={'0.2rem'} compact>
+                Confirm Delete
+              </Button>
+
+              <Button
+                variant="subtle"
+                mt={'0.2rem'}
+                compact
+                onClick={() => {
+                  setIsVerifyingDelete(false)
+                }}
+              >
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <ActionIcon
+              variant="subtle"
+              type="button"
+              mt={'0.2rem'}
+              onClick={() => {
+                setIsVerifyingDelete(true)
+              }}
+            >
+              <IconTrash />
+            </ActionIcon>
+          )}
         </>
       )
     }
