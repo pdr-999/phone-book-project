@@ -16,7 +16,7 @@ export const ContactId: React.FC = () => {
       id: parseInt(id!),
     },
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
   })
 
   return (
