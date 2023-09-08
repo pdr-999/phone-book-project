@@ -117,7 +117,7 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
 
   useEffect(() => {
     // FIXME: if footer is really long then you gotta scroll till bottom
-    if (!isEndOfData && scroll.y === maxScrollH && maxScrollH !== 0) {
+    if (!isEndOfData && scroll.y === maxScrollH) {
       setOffset((prev) => {
         const newPrev = prev + PER_PAGE
 
