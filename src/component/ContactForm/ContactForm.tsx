@@ -164,7 +164,7 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
     if (isNew) {
       return (
         <>
-          <ActionIcon mb={'0.35rem'} type="submit">
+          <ActionIcon mt={'0.2rem'} type="submit">
             <IconPlus />
           </ActionIcon>
         </>
@@ -174,11 +174,11 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
     if (isEditing) {
       return (
         <>
-          <ActionIcon mb={'0.35rem'} type="submit">
+          <ActionIcon mt={'0.2rem'} type="submit">
             <IconCheck />
           </ActionIcon>
           <Button
-            mb={'0.4rem'}
+            mt={'0.2rem'}
             compact
             type="button"
             size="sm"
@@ -199,7 +199,7 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
         <>
           <ActionIcon
             type="button"
-            mb={'0.35rem'}
+            mt={'0.2rem'}
             onClick={(e) => {
               e.preventDefault()
               setIsEditing((prev) => !prev)
@@ -217,7 +217,12 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
         <Grid.Col>
           <Grid>
             <Grid.Col>
-              <Flex direction={'row'} align={'flex-end'} w={'100%'} gap={'sm'}>
+              <Flex
+                direction={'row'}
+                align={'flex-start'}
+                w={'100%'}
+                gap={'sm'}
+              >
                 <TextInput
                   readOnly={isNew ? false : !isEditing}
                   pl={variant() === 'unstyled' ? 'sm' : undefined}
