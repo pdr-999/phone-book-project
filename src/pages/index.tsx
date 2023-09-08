@@ -6,8 +6,6 @@ const Index: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <Link to={'/contact/create'}>Create contact</Link>
-        <SwNotification />
         <ContactList />
       </header>
     </div>
