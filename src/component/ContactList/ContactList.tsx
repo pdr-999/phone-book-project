@@ -97,6 +97,9 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
               ?.startsWith(previousFirstNameFirstLetter) === false ||
               index === 0) && (
               <Divider
+                sx={{
+                  userSelect: 'none',
+                }}
                 labelPosition="center"
                 label={first_name?.charAt(0).toUpperCase()}
                 my={'md'}
