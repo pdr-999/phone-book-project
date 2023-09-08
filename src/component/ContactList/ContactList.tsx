@@ -70,6 +70,7 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
                 */
 
                 removeContactFromFavourites(contact)
+                setExpandedContactId(null)
               }}
               phoneNumbers={
                 phones?.map((phone) => ({
@@ -122,6 +123,7 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
 
                 addContactToFavourites(contact)
                 refetch()
+                setExpandedContactId(null)
               }}
               isActive={expandedContactId === id}
               phoneNumbers={
