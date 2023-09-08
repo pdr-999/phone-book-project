@@ -13,8 +13,10 @@ import { GET_FAVOURITE_CONTACTS } from '../../gql/favouriteContacts/query'
 import { GetFavouriteContactList } from '../../gql/favouriteContacts/type'
 import { Contact, ContactProps } from '../Contact/Contact'
 import { notifications } from '@mantine/notifications'
+import { useNavigate } from 'react-router-dom'
 
 export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
+  const navigate = useNavigate()
   const { data, refetch } = useQuery<GetContactList, GetContactListVariables>(
     GET_CONTACT_LIST,
     {
@@ -58,10 +60,17 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
           const { first_name, last_name, id, phones } = contact
           return (
             <Contact
+              isActive={expandedContactId === id}
               key={id}
               isFavourite={true}
               firstName={first_name}
               lastName={last_name}
+              onClick={() => {
+                if (!id) return
+                const newId = id === expandedContactId ? null : id
+
+                setExpandedContactId(newId)
+              }}
               onFavouriteClick={() => {
                 if (!id) return
                 /**
@@ -157,6 +166,9 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
                 })
                 refetch()
                 setExpandedContactId(null)
+              }}
+              onEditClick={() => {
+                navigate(`/contact/${id}`)
               }}
               isActive={expandedContactId === id}
               phoneNumbers={

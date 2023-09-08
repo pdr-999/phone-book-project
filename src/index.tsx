@@ -10,6 +10,7 @@ import { CreateContact } from './pages/contact/create'
 import { createEmotionCache, MantineProvider } from '@mantine/core'
 import { mantineTheme } from './mantine.config'
 import { Notifications } from '@mantine/notifications'
+import { ContactId } from './pages/contact/id'
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: '/contact/create',
     element: <CreateContact />,
+  },
+  {
+    path: '/contact/:id',
+    element: <ContactId />,
   },
 ])
 

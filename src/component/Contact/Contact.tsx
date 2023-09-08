@@ -31,6 +31,7 @@ export interface ContactProps {
   isActive?: boolean
   onClick?: () => unknown
   onFavouriteClick?: () => unknown
+  onEditClick?: () => unknown
   isFavourite?: boolean
 }
 
@@ -202,7 +203,7 @@ export const Contact: React.FC<ContactProps> = (props) => {
                 <IconStar size="1.6rem" />
               )}
             </ActionIcon>
-            <ActionIcon color="blue" size={'lg'}>
+            <ActionIcon color="blue" size={'lg'} onClick={props.onEditClick}>
               <IconEdit size="1.6rem" />
             </ActionIcon>
             <ActionIcon color="red" size={'lg'}>
