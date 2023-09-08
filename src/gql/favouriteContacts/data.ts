@@ -32,6 +32,21 @@ export const addContactToFavourites = (contact: Contact) => {
   favouriteContactsVar([...favouriteContacts.values()])
 }
 
+export const updateContactInFavourite = (contact: Contact) => {
+  // TODO: assume contact id always exist?
+  if (!contact?.id) return
+
+  const favouriteContacts = getFavouriteContactsFromLocalStorage()
+
+  if (favouriteContacts.has(contact.id)) {
+    favouriteContacts.set(contact.id, contact)
+
+    setFavouriteContactsToLocalStorage(favouriteContacts)
+
+    favouriteContactsVar([...favouriteContacts.values()])
+  }
+}
+
 export const removeContactFromFavourites = (contact: Contact) => {
   // TODO: assume contact id always exist?
   if (!contact?.id) return

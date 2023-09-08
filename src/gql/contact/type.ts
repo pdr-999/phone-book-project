@@ -52,6 +52,7 @@ export type GetContactListVariables = {
 }
 
 export type GetContactByPk = { contact_by_pk: Contact }
+export type EditContactByPk = { update_contact_by_pk: Contact }
 
 export type GetContactByPkVariables = { id: number }
 

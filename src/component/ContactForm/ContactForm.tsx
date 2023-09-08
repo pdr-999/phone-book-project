@@ -13,7 +13,11 @@ import { notifications } from '@mantine/notifications'
 import { IconCheck, IconEdit, IconPlus, IconTrash } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { EDIT_CONTACT_BY_ID } from '../../gql/contact/mutation'
-import { EditContactByPkVariables } from '../../gql/contact/type'
+import {
+  EditContactByPk,
+  EditContactByPkVariables,
+} from '../../gql/contact/type'
+import { updateContactInFavourite } from '../../gql/favouriteContacts/data'
 import {
   DELETE_PHONE,
   EDIT_PHONE_BY_PK,
@@ -339,9 +343,10 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
     },
   })
 
-  const [mutateEditContact] = useMutation<any, EditContactByPkVariables>(
-    EDIT_CONTACT_BY_ID
-  )
+  const [mutateEditContact] = useMutation<
+    EditContactByPk,
+    EditContactByPkVariables
+  >(EDIT_CONTACT_BY_ID)
 
   const onInformationFormSubmit = (values: InformationForm) => {
     if (props?.initialValues?.id) {
@@ -354,7 +359,10 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
           },
         },
       })
-        .then(() => {
+        .then((res) => {
+          if (!res?.data?.update_contact_by_pk) return
+
+          updateContactInFavourite(res.data.update_contact_by_pk)
           notifications.show({
             color: 'green',
             message: 'Updated contact information',

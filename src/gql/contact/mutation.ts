@@ -6,6 +6,10 @@ export const EDIT_CONTACT_BY_ID = gql`
       id
       first_name
       last_name
+      phones {
+        id
+        number
+      }
     }
   }
 `
