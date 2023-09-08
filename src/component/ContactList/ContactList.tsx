@@ -82,19 +82,19 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
   /**
    * FIXME: after creating Zone Doe, then changing it to Aone Done, user stays at bottom
    */
-  const { data, fetchMore, refetch } = useQuery<
-    GetContactList,
-    GetContactListVariables
-  >(GET_CONTACT_LIST, {
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      limit: PER_PAGE,
-      offset: 0,
-      order_by: {
-        first_name: 'asc',
+  const { data, fetchMore } = useQuery<GetContactList, GetContactListVariables>(
+    GET_CONTACT_LIST,
+    {
+      fetchPolicy: 'cache-and-network',
+      variables: {
+        limit: PER_PAGE,
+        offset: 0,
+        order_by: {
+          first_name: 'asc',
+        },
       },
-    },
-  })
+    }
+  )
 
   const { data: favouriteContactsData } = useQuery<GetFavouriteContactList>(
     GET_FAVOURITE_CONTACTS
