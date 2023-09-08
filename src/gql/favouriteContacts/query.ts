@@ -1,5 +1,6 @@
 import { gql, makeVar } from '@apollo/client'
 import { getFavouriteContactsFromLocalStorage } from './data'
+import { Contact } from '../contact/type'
 
 export const GET_FAVOURITE_CONTACTS = gql`
   query GetFavouriteContacts {
@@ -7,6 +8,6 @@ export const GET_FAVOURITE_CONTACTS = gql`
   }
 `
 
-export const favouriteContactsVar = makeVar<number[]>([
+export const favouriteContactsVar = makeVar<Contact[]>([
   ...getFavouriteContactsFromLocalStorage().values(),
 ])

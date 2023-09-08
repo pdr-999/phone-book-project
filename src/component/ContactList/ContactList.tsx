@@ -1,10 +1,11 @@
-import { useQuery } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 import { Box, Divider } from '@mantine/core'
 import { useState } from 'react'
 import { GET_CONTACT_LIST } from '../../gql/contact/query'
 import { GetContactList, GetContactListVariables } from '../../gql/contact/type'
 import { addContactToFavourites } from '../../gql/favouriteContacts/data'
 import { Contact, ContactProps } from '../Contact/Contact'
+import { client } from '../../gql/client'
 
 export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
   const { data } = useQuery<GetContactList, GetContactListVariables>(
@@ -80,7 +81,7 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
                   stored value (if any) on app load.
                  */
 
-                addContactToFavourites(id)
+                addContactToFavourites(contact)
               }}
               isActive={expandedContactId === id}
               phoneNumbers={
