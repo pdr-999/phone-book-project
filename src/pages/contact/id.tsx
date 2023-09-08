@@ -21,7 +21,7 @@ export const ContactId: React.FC = () => {
 
   return (
     <>
-      <Box p={'md'}>
+      <Box>
         {loading && <Loader />}
         {data?.contact_by_pk?.id ? (
           <ContactForm
