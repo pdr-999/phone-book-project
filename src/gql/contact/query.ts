@@ -22,11 +22,8 @@ export const GET_CONTACT_LIST = gql`
       phones {
         id
         number
-        __typename
       }
       updated_at
-      is_favourite @client
-      __typename
     }
   }
 `
