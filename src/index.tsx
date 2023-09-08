@@ -12,9 +12,15 @@ import { CreateContact } from './pages/contact/create'
 import { ContactId } from './pages/contact/id'
 import reportWebVitals from './reportWebVitals'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import { SwNotification } from './component/SwNotification'
 
 const ElementWrapper = (component: ReactNode) => {
-  return <MyAppShell>{component}</MyAppShell>
+  return (
+    <MyAppShell>
+      <SwNotification />
+      {component}
+    </MyAppShell>
+  )
 }
 
 const router = createBrowserRouter([

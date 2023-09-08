@@ -1,3 +1,4 @@
+import { Box, Button, Flex, Text } from '@mantine/core'
 import { useEffect, useState } from 'react'
 
 export const SwNotification: React.FC = () => {
@@ -12,17 +13,21 @@ export const SwNotification: React.FC = () => {
       })
   }, [])
 
-  if (waitingSw === null) return <>Up to date!</>
+  if (waitingSw === null) return <></>
   return (
-    <>
-      <button
+    <Flex align={'center'} justify={'center'} gap={'sm'}>
+      <Text align="center" size={'sm'}>
+        New Version Is Available
+      </Text>
+      <Button
+        compact
         onClick={() => {
           waitingSw.postMessage({ type: 'SKIP_WAITING' })
           window.location.reload()
         }}
       >
-        Update
-      </button>
-    </>
+        Reload
+      </Button>
+    </Flex>
   )
 }
