@@ -1,11 +1,13 @@
-import { Link } from 'react-router-dom'
+import { Box } from '@mantine/core'
+import { ContactAddForm } from '../../component/ContactForm/ContactAddForm'
 
 export const CreateContact: React.FC = () => {
   // TODO: make navigation not go back and forth in PWA
   return (
     <>
-      <h4> Welcome to create contact page </h4>
-      <Link to={'/'}>Back to Home</Link>
+      <Box>
+        <ContactAddForm />
+      </Box>
     </>
   )
 }

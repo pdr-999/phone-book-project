@@ -41,3 +41,11 @@ export type EditContactByPkVariables = {
     last_name: string
   }
 }
+
+export type AddContactVariables = {
+  first_name: string
+  last_name: string
+  phones: {
+    number: string
+  }[]
+}

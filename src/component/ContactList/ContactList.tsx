@@ -40,6 +40,9 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
 
   const navigate = useNavigate()
 
+  /**
+   * FIXME: after creating Zone Doe, then changing it to Aone Done, user stays at bottom
+   */
   const { data, fetchMore } = useQuery<GetContactList, GetContactListVariables>(
     GET_CONTACT_LIST,
     {
