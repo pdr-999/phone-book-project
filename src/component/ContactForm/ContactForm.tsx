@@ -246,7 +246,10 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
                         if (props.onRemovePhone) {
                           props.onRemovePhone(id)
                         }
-
+                        notifications.show({
+                          message: 'Deleted Phone Number',
+                          color: 'red',
+                        })
                         setIsVerifyingDelete(false)
                         form.reset()
                       })
