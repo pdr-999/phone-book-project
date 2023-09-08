@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text } from '@mantine/core'
+import { Button, Flex, Text } from '@mantine/core'
 import { useEffect, useState } from 'react'
 
 export const SwNotification: React.FC = () => {
