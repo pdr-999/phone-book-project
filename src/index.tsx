@@ -1,14 +1,61 @@
-import React from 'react'
+import { ApolloProvider } from '@apollo/client'
+import { createEmotionCache, MantineProvider } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
+import React, { ReactNode } from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
-import App from './App'
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { MyAppShell } from './component/AppShell/AppShell'
+import { client } from './gql/client'
+import { mantineTheme } from './mantine.config'
+import Index from './pages'
+import { CreateContact } from './pages/contact/create'
+import { ContactId } from './pages/contact/id'
 import reportWebVitals from './reportWebVitals'
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import { SwNotification } from './component/SwNotification'
+
+const ElementWrapper = (component: ReactNode) => {
+  return (
+    <MyAppShell>
+      <SwNotification />
+      {component}
+    </MyAppShell>
+  )
+}
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: ElementWrapper(<Index />),
+  },
+  {
+    path: '/contact/create',
+    element: ElementWrapper(<CreateContact />),
+  },
+  {
+    path: '/contact/:id',
+    element: ElementWrapper(<ContactId />),
+  },
+])
+
+const myCache = createEmotionCache({ key: 'mantine', prepend: true })
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+
 root.render(
   <React.StrictMode>
-    <App />
+    <ApolloProvider client={client}>
+      <MantineProvider
+        emotionCache={myCache}
+        withGlobalStyles
+        withNormalizeCSS
+        theme={mantineTheme}
+      >
+        <Notifications />
+
+        <RouterProvider router={router} />
+      </MantineProvider>
+    </ApolloProvider>
   </React.StrictMode>
 )
 
