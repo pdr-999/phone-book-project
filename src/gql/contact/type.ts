@@ -28,3 +28,15 @@ export type GetContactListVariables = {
   order_by?: ContactOrderBy
   is_favourite?: boolean
 }
+
+export type GetContactByPk = { contact_by_pk: Contact }
+
+export type GetContactByPkVariables = { id: number }
+
+export type EditContactByPkVariables = {
+  id: number
+  _set: {
+    first_name: string
+    last_name: string
+  }
+}

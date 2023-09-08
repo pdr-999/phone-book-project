@@ -20,6 +20,7 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
   const { data, refetch } = useQuery<GetContactList, GetContactListVariables>(
     GET_CONTACT_LIST,
     {
+      fetchPolicy: 'network-only',
       variables: {
         order_by: {
           first_name: 'asc',
