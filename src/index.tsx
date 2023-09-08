@@ -1,29 +1,34 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-import reportWebVitals from './reportWebVitals'
 import { ApolloProvider } from '@apollo/client'
-import { client } from './gql/client'
+import { createEmotionCache, MantineProvider } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
+import React, { ReactNode } from 'react'
+import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { MyAppShell } from './component/AppShell/AppShell'
+import { client } from './gql/client'
+import { mantineTheme } from './mantine.config'
 import Index from './pages'
 import { CreateContact } from './pages/contact/create'
-import { createEmotionCache, MantineProvider } from '@mantine/core'
-import { mantineTheme } from './mantine.config'
-import { Notifications } from '@mantine/notifications'
 import { ContactId } from './pages/contact/id'
+import reportWebVitals from './reportWebVitals'
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+
+const ElementWrapper = (component: ReactNode) => {
+  return <MyAppShell>{component}</MyAppShell>
+}
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Index />,
+    element: ElementWrapper(<Index />),
   },
   {
     path: '/contact/create',
-    element: <CreateContact />,
+    element: ElementWrapper(<CreateContact />),
   },
   {
     path: '/contact/:id',
-    element: <ContactId />,
+    element: ElementWrapper(<ContactId />),
   },
 ])
 
@@ -41,6 +46,7 @@ root.render(
         theme={mantineTheme}
       >
         <Notifications />
+
         <RouterProvider router={router} />
       </MantineProvider>
     </ApolloProvider>
