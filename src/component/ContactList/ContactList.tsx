@@ -88,11 +88,13 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
           variables: {
             offset: newPrev,
           },
-        }).then((res) => {
-          if (res?.data.contact.length === 0) {
-            setIsEndOfData(true)
-          }
         })
+          .then((res) => {
+            if (res?.data.contact.length === 0) {
+              setIsEndOfData(true)
+            }
+          })
+          .catch(() => {})
 
         return newPrev
       })
@@ -219,7 +221,6 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
                   }),
                   autoClose: 2000,
                 })
-                refetch()
                 setExpandedContactId(null)
               }}
               onEditClick={() => {
