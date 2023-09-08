@@ -1,12 +1,4 @@
-import {
-  ActionIcon,
-  AppShell,
-  Box,
-  Flex,
-  Grid,
-  Header,
-  Text,
-} from '@mantine/core'
+import { ActionIcon, AppShell, Box, Grid, Header, Text } from '@mantine/core'
 import { IconChevronLeft } from '@tabler/icons-react'
 import { ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'

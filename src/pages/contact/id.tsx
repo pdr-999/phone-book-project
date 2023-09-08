@@ -1,23 +1,23 @@
 import { useQuery } from '@apollo/client'
-import { GET_CONTACT_BY_PK } from '../../gql/contact/query'
-import { GetContactByPk, GetContactByPkVariables } from '../../gql/contact/type'
+import { Box, Loader } from '@mantine/core'
 import { useParams } from 'react-router-dom'
 import { ContactForm } from '../../component/ContactForm/ContactForm'
-import { Box, Loader } from '@mantine/core'
+import { GET_CONTACT_BY_PK } from '../../gql/contact/query'
+import { GetContactByPk, GetContactByPkVariables } from '../../gql/contact/type'
 
 export const ContactId: React.FC = () => {
   const { id } = useParams()
 
-  const { data, refetch, loading } = useQuery<
-    GetContactByPk,
-    GetContactByPkVariables
-  >(GET_CONTACT_BY_PK, {
-    variables: {
-      id: parseInt(id!),
-    },
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
-  })
+  const { data, loading } = useQuery<GetContactByPk, GetContactByPkVariables>(
+    GET_CONTACT_BY_PK,
+    {
+      variables: {
+        id: parseInt(id!),
+      },
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'cache-and-network',
+    }
+  )
 
   return (
     <>

@@ -25,6 +25,7 @@ export type GetContactList = { contact: Contact[] }
 
 export type GetContactListVariables = {
   offset?: number
+  limit?: number
   order_by?: ContactOrderBy
   is_favourite?: boolean
 }

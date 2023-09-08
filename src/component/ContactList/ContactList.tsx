@@ -1,7 +1,9 @@
 import { useQuery } from '@apollo/client'
 import { Box, Divider } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { IconStar, IconStarFilled } from '@tabler/icons-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { GET_CONTACT_LIST } from '../../gql/contact/query'
 import { GetContactList, GetContactListVariables } from '../../gql/contact/type'
 import {
@@ -12,23 +14,46 @@ import {
 import { GET_FAVOURITE_CONTACTS } from '../../gql/favouriteContacts/query'
 import { GetFavouriteContactList } from '../../gql/favouriteContacts/type'
 import { Contact, ContactProps } from '../Contact/Contact'
-import { notifications } from '@mantine/notifications'
-import { useNavigate } from 'react-router-dom'
+// const scrollMaxValue = () => {
+//   const body = document.body
+//   const html = document.documentElement
 
+//   const documentHeight = Math.max(
+//     body.scrollHeight,
+//     body.offsetHeight,
+//     html.clientHeight,
+//     html.scrollHeight,
+//     html.offsetHeight
+//   )
+
+//   const windowHeight = window.innerHeight
+
+//   return documentHeight - windowHeight
+// }
 export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
+  // const [scroll, scrollTo] = useWindowScroll()
+
+  // const maxScrollH = scrollMaxValue()
+
   const navigate = useNavigate()
-  const { data, refetch } = useQuery<GetContactList, GetContactListVariables>(
-    GET_CONTACT_LIST,
-    {
-      fetchPolicy: 'cache-and-network',
-      variables: {
-        order_by: {
-          first_name: 'asc',
-        },
+
+  const { data, refetch, fetchMore } = useQuery<
+    GetContactList,
+    GetContactListVariables
+  >(GET_CONTACT_LIST, {
+    // fetchPolicy: 'cache-and-network',
+    // nextFetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      limit: 10,
+      offset: 0,
+      order_by: {
+        first_name: 'asc',
       },
-      notifyOnNetworkStatusChange: true,
-    }
-  )
+    },
+  })
+
+  console.log(data)
 
   const { data: favouriteContactsData } = useQuery<GetFavouriteContactList>(
     GET_FAVOURITE_CONTACTS
@@ -45,8 +70,29 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
       (contact) => contact.id && !favouriteContacts.has(contact.id)
     ) ?? []
 
+  // useEffect(() => {
+  //   if (maxScrollH === 0) return
+
+  //   // FIXME: if footer is really long then you gotta scroll till bottom
+  //   if (scroll.y === maxScrollH) {
+
+  //   }
+  // }, [scroll.y, maxScrollH])
   return (
     <>
+      <button
+        onClick={() => {
+          if (data?.contact.length) {
+            fetchMore({
+              variables: {
+                offset: data?.contact.length,
+              },
+            })
+          }
+        }}
+      >
+        fetchMore
+      </button>
       <Box>
         {favouriteContacts.size > 0 && (
           <Divider

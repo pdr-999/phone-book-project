@@ -339,10 +339,9 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
     },
   })
 
-  const [mutateEditContact, { data, loading, error }] = useMutation<
-    any,
-    EditContactByPkVariables
-  >(EDIT_CONTACT_BY_ID)
+  const [mutateEditContact] = useMutation<any, EditContactByPkVariables>(
+    EDIT_CONTACT_BY_ID
+  )
 
   const onInformationFormSubmit = (values: InformationForm) => {
     if (props?.initialValues?.id) {
