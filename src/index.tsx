@@ -9,6 +9,7 @@ import Index from './pages'
 import { CreateContact } from './pages/contact/create'
 import { createEmotionCache, MantineProvider } from '@mantine/core'
 import { mantineTheme } from './mantine.config'
+import { Notifications } from '@mantine/notifications'
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,7 @@ root.render(
         withNormalizeCSS
         theme={mantineTheme}
       >
+        <Notifications />
         <RouterProvider router={router} />
       </MantineProvider>
     </ApolloProvider>

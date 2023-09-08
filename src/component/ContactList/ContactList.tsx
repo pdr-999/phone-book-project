@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Box, Divider } from '@mantine/core'
-import { IconStar } from '@tabler/icons-react'
+import { IconStar, IconStarFilled } from '@tabler/icons-react'
 import { useState } from 'react'
 import { GET_CONTACT_LIST } from '../../gql/contact/query'
 import { GetContactList, GetContactListVariables } from '../../gql/contact/type'
@@ -12,6 +12,7 @@ import {
 import { GET_FAVOURITE_CONTACTS } from '../../gql/favouriteContacts/query'
 import { GetFavouriteContactList } from '../../gql/favouriteContacts/type'
 import { Contact, ContactProps } from '../Contact/Contact'
+import { notifications } from '@mantine/notifications'
 
 export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
   const { data, refetch } = useQuery<GetContactList, GetContactListVariables>(
@@ -47,7 +48,7 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
         {favouriteContacts.size > 0 && (
           <Divider
             labelPosition="center"
-            label={<IconStar size={'1rem'} />}
+            label={<IconStarFilled size={'1rem'} />}
             my={'md'}
           />
         )}
@@ -58,6 +59,7 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
           return (
             <Contact
               key={id}
+              isFavourite={true}
               firstName={first_name}
               lastName={last_name}
               onFavouriteClick={() => {
@@ -71,6 +73,20 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
 
                 removeContactFromFavourites(contact)
                 setExpandedContactId(null)
+                notifications.show({
+                  message: 'Removed to favourites',
+                  icon: <IconStar />,
+                  styles: (theme) => ({
+                    icon: {
+                      backgroundColor: 'transparent',
+                      color: theme.colors.yellow[2],
+                    },
+                    root: {
+                      backgroundColor: theme.colors.dark[5],
+                    },
+                  }),
+                  autoClose: 2000,
+                })
               }}
               phoneNumbers={
                 phones?.map((phone) => ({
@@ -125,6 +141,20 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
                  */
 
                 addContactToFavourites(contact)
+                notifications.show({
+                  message: 'Added to favourites',
+                  icon: <IconStarFilled />,
+                  styles: (theme) => ({
+                    icon: {
+                      backgroundColor: 'transparent',
+                      color: theme.colors.yellow[2],
+                    },
+                    root: {
+                      backgroundColor: theme.colors.dark[5],
+                    },
+                  }),
+                  autoClose: 2000,
+                })
                 refetch()
                 setExpandedContactId(null)
               }}

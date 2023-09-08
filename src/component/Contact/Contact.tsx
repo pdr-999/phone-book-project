@@ -8,7 +8,12 @@ import {
   createStyles,
   rem,
 } from '@mantine/core'
-import { IconEdit, IconStar, IconTrash } from '@tabler/icons-react'
+import {
+  IconEdit,
+  IconStar,
+  IconStarFilled,
+  IconTrash,
+} from '@tabler/icons-react'
 import { useState } from 'react'
 
 interface PhoneNumber {
@@ -26,6 +31,7 @@ export interface ContactProps {
   isActive?: boolean
   onClick?: () => unknown
   onFavouriteClick?: () => unknown
+  isFavourite?: boolean
 }
 
 const TRANSITION_PROPERTY: CSSObject = {
@@ -45,6 +51,7 @@ export const Contact: React.FC<ContactProps> = (props) => {
     isLastItem: last = false,
     phoneNumbers = [],
     isActive: isControlledActive = undefined,
+    isFavourite: isFavourited = false,
   } = props
   const firstPhoneNumber = phoneNumbers[0]?.phoneNumber ?? null
   const avatarUrl = `https://ui-avatars.com/api/?name=${firstName}+${lastName}`
@@ -189,7 +196,11 @@ export const Contact: React.FC<ContactProps> = (props) => {
               size={'lg'}
               onClick={props.onFavouriteClick}
             >
-              <IconStar size="1.6rem" />
+              {isFavourited ? (
+                <IconStarFilled size="1.6rem" />
+              ) : (
+                <IconStar size="1.6rem" />
+              )}
             </ActionIcon>
             <ActionIcon color="blue" size={'lg'}>
               <IconEdit size="1.6rem" />

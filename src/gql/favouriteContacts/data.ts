@@ -1,5 +1,7 @@
 import { makeVar } from '@apollo/client'
 import { Contact } from '../contact/type'
+import { notifications } from '@mantine/notifications'
+import { IconStar } from '@tabler/icons-react'
 
 export const favouriteContactsVar = makeVar<Contact[]>([])
 
