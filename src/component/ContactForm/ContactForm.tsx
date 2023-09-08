@@ -14,10 +14,15 @@ import { IconCheck, IconEdit, IconPlus, IconTrash } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { EDIT_CONTACT_BY_ID } from '../../gql/contact/mutation'
 import { EditContactByPkVariables } from '../../gql/contact/type'
-import { EDIT_PHONE_BY_PK, INSERT_PHONE_ONE } from '../../gql/phone/mutation'
+import {
+  DELETE_PHONE,
+  EDIT_PHONE_BY_PK,
+  INSERT_PHONE_ONE,
+} from '../../gql/phone/mutation'
 import {
   AddPhoneToContactResponse,
   AddPhoneToContactVariables,
+  DeletePhoneByPkVariables,
   EditPhoneByPkVariables,
 } from '../../gql/phone/type'
 
@@ -45,6 +50,7 @@ interface ContactPhoneFormProps {
   }
   contactId?: number
   onAddNewPhone?: (values: PhoneForm) => unknown
+  onRemovePhone?: (id: number) => unknown
 }
 interface PhoneForm {
   id?: number
@@ -64,7 +70,7 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
   })
   const isNew = !form.values.id
 
-  const [mutateEditPhone, {}] = useMutation<any, EditPhoneByPkVariables>(
+  const [mutateEditPhone] = useMutation<any, EditPhoneByPkVariables>(
     EDIT_PHONE_BY_PK
   )
 
@@ -72,6 +78,11 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
     useMutation<AddPhoneToContactResponse, AddPhoneToContactVariables>(
       INSERT_PHONE_ONE
     )
+
+  const [mutateDeletePhoneFromContact] = useMutation<
+    unknown,
+    DeletePhoneByPkVariables
+  >(DELETE_PHONE)
 
   useEffect(() => {
     if (!addPhoneToContactError) return
@@ -214,7 +225,35 @@ const ContactPhoneForm: React.FC<ContactPhoneFormProps> = (props) => {
 
           {isVerifyingDelete ? (
             <>
-              <Button variant="subtle" color="red" mt={'0.2rem'} compact>
+              <Button
+                variant="subtle"
+                color="red"
+                mt={'0.2rem'}
+                compact
+                onClick={() => {
+                  const id = form?.values?.id
+                  if (id) {
+                    mutateDeletePhoneFromContact({
+                      variables: {
+                        where: {
+                          id: {
+                            _eq: id,
+                          },
+                        },
+                      },
+                    })
+                      .then(() => {
+                        if (props.onRemovePhone) {
+                          props.onRemovePhone(id)
+                        }
+
+                        setIsVerifyingDelete(false)
+                        form.reset()
+                      })
+                      .catch(() => {})
+                  }
+                }}
+              >
                 Confirm Delete
               </Button>
 
@@ -330,6 +369,7 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
   }
 
   const [contactPhones, setContactPhones] = useState(props.initialValues.phones)
+
   return (
     <>
       <Text size={'sm'} mb={'0.25rem'} mt={'1rem'} fw={'bold'}>
@@ -375,10 +415,16 @@ export const ContactForm: React.FC<ContactFormProps> = (props) => {
       {contactPhones?.map((phone, index) => {
         return (
           <ContactPhoneForm
-            key={index}
+            key={phone.id}
             initialValues={{
               id: phone.id,
               phoneNumber: phone.phoneNumber,
+            }}
+            onRemovePhone={(id) => {
+              setContactPhones((prev) => {
+                const prevMap = prev?.filter((p) => p.id !== id)
+                return prevMap
+              })
             }}
           />
         )

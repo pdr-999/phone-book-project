@@ -20,3 +20,11 @@ export interface AddPhoneToContactVariables {
     contact_id: number
   }
 }
+
+export interface DeletePhoneByPkVariables {
+  where: {
+    id: {
+      _eq: number
+    }
+  }
+}

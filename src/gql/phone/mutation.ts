@@ -16,3 +16,11 @@ export const INSERT_PHONE_ONE = gql`
     }
   }
 `
+
+export const DELETE_PHONE = gql`
+  mutation DeletePhone($where: phone_bool_exp!) {
+    delete_phone(where: $where) {
+      affected_rows
+    }
+  }
+`
