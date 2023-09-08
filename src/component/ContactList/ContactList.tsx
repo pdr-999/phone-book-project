@@ -46,13 +46,14 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
       {/* TODO: isolate rerender to */}
       {data?.contact.map((contact, index) => {
         const { first_name, last_name, id, phones } = contact
+        const previousFirstNameFirstLetter =
+          data.contact[index - 1]?.first_name?.charAt(0)?.toUpperCase() ?? ''
 
         return (
           <Box key={id}>
-            {(first_name?.startsWith(
-              data.contact[index - 1]?.first_name?.[0]?.toLocaleUpperCase() ??
-                ''
-            ) === false ||
+            {(first_name
+              ?.toUpperCase()
+              ?.startsWith(previousFirstNameFirstLetter) === false ||
               index === 0) && (
               <Divider
                 labelPosition="center"
