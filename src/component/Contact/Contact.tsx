@@ -16,8 +16,6 @@ import {
   IconTrash,
 } from '@tabler/icons-react'
 import { useState } from 'react'
-import { DELETE_CONTACT_BY_ID } from '../../gql/contact/mutation'
-import { useMutation } from '@apollo/client'
 
 interface PhoneNumber {
   id?: number
