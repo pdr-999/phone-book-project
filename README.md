@@ -13,7 +13,7 @@ git clone git@github.com:pdr-999/phone-book-project.git && cd phone-book-project
 ```
 npm install
 ```
-3. Create .env file using .env.example
+3. Create `.env.local` file in root using `.env.example` as example
 4. Start
 ```
 npm run start
