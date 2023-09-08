@@ -31,7 +31,7 @@ const scrollMaxValue = () => {
 
   return documentHeight - windowHeight
 }
-const PER_PAGE = 5
+const PER_PAGE = 10
 export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
   const [scroll] = useWindowScroll()
 
