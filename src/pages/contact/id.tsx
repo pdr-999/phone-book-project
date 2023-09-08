@@ -23,7 +23,7 @@ export const ContactId: React.FC = () => {
     <>
       <Box p={'md'}>
         {loading && <Loader />}
-        {data && (
+        {data?.contact_by_pk?.id ? (
           <ContactForm
             initialValues={{
               id: data.contact_by_pk.id,
@@ -36,6 +36,9 @@ export const ContactId: React.FC = () => {
                 })) ?? [],
             }}
           />
+        ) : (
+          // TODO: better error message
+          'No contact found'
         )}
       </Box>
     </>
