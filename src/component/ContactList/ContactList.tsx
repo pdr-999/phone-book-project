@@ -190,6 +190,30 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch])
+
+  const onDelete = (id: number) => {
+    if (!id) return
+    mutateDeleteContact({
+      variables: {
+        deleteContactByPkId: id,
+      },
+      update(cache) {
+        const normalizedId = cache.identify({
+          id,
+          __typename: 'contact',
+        })
+        cache.evict({ id: normalizedId })
+        cache.gc()
+      },
+    })
+      .then(() => {
+        notifications.show({
+          message: 'Deleted contact',
+        })
+        // TODO: Handle error
+      })
+      .catch(() => {})
+  }
   return (
     <>
       <DebouncedTextInput
@@ -211,6 +235,15 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
           const { first_name, last_name, id, phones } = contact
           return (
             <Contact
+              onConfirmDelete={() => {
+                console.log(id)
+                if (!id) return
+                onDelete(id)
+                removeContactFromFavourites(contact)
+              }}
+              onEditClick={() => {
+                navigate(`/contact/${id}`)
+              }}
               isActive={expandedContactId === id}
               key={id}
               isFavourite={true}
@@ -285,26 +318,7 @@ export const ContactList: React.FC<{ contacts?: ContactProps[] }> = () => {
             <Contact
               onConfirmDelete={() => {
                 if (!id) return
-                mutateDeleteContact({
-                  variables: {
-                    deleteContactByPkId: id,
-                  },
-                  update(cache) {
-                    const normalizedId = cache.identify({
-                      id,
-                      __typename: 'contact',
-                    })
-                    cache.evict({ id: normalizedId })
-                    cache.gc()
-                  },
-                })
-                  .then(() => {
-                    notifications.show({
-                      message: 'Deleted contact',
-                    })
-                    // TODO: Handle error
-                  })
-                  .catch(() => {})
+                onDelete(id)
               }}
               firstName={first_name}
               lastName={last_name}
